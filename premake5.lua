@@ -1,6 +1,6 @@
 
 -- A solution contains projects, and defines the available configurations
-solution "graphicsByExample"
+solution "3D_Pong"
    configurations { "Debug", "Release"}
 
    flags { "Unicode" , "NoPCH"}
