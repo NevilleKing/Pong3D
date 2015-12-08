@@ -1,0 +1,112 @@
+== 3D Triangles, with translations with matrices
+:toc:
+:!numbered:
+
+=== Summary
+
+This example introduces using matrices to transform our vertices - it renders exactly the same as both 2D_triangles, and 2D_trianglesWithGLM, but the translation of each triangle is performed with matrices. For 2D, we use 3x3 matrices, and for 3D we use 4x4 matrices.
+
+Matrices can represented translations, rotations, scales and other affine transformations, or any combinations of those. This allows us a single representation for the transformation applied to vertices, independent of what the actual transformation is, which we can apply with matrix multiplication.
+
+We can pass matrices into OpenGL easily (they are just arrays of 16 floats), and the GLM library provides us with useful matrix classes.
+
+Using matrices for 2D transformations is highly effective, but for these examples we'll only use them for 3D work (even when actually do 2D work). This is because:
+
+  a. we want to learn how to do 3D transformations
+  b. GLM's transformations functions (e.g. `translate`) only support 4x4 matrices
+    * OpenGL is always 3D anyway, so we for 2D work, we just fix the z-value (or use the z-value for sorting)
+
+NOTE: remember that matrix multiplication is NOT commutative - that is, the order matters with matrix multiplication.
+
+==== Vertex Shader
+
+We're going to pass matrices into GLSL to control the transformations, instead of the translation vectors. We'll use three matrices - `modelMatrix`, `viewMatrix` and `projectionMatrix`.
+
+Only `modelMatrix` will have any effect in this example, `viewMatrix` and `projectionMatrix` will be used in later examples.
+
+The `modelMatrix` is used to control the transformation of the model - that is the visual object that we want to see on the screen. In this example, our models are the two triangles.
+
+We'll make all three matrices default to the identity matrix - a matrix that has no effect. Only when we set them from C++ will they have an effect on the vertices.
+
+In order to apply the transformations, each matrix is multiplied by the position. Note the order of these operations.
+
+For reference, the `viewMatrix` will be used to control when we view our scene from, where we look, and related properties. The `projectionMatrix` will be used to control how we project the 3D world onto a 2D plane to display.
+
+[source, glsl]
+----
+include::vertexShader.glsl[]
+----
+
+==== pass:[C++] - `vertexData`
+
+We're now moving to 3D, so we should to add a third dimension to our `vertexData` array. We're going to set these all to zero for now, so we don't strictly have to do this yet, but it will make things easier later on.
+
+[source, cpp]
+----
+include::main.cpp[tags=vertexData]
+----
+
+As our `vertexData` array is now structured differently, we need to update how we read data from the Vertex Buffer Object that contains a copy of it (in OpenGL). This information is stored in the Vertex Array Object, and specified with `glVertexAttribPointer`.
+
+[source, cpp]
+----
+include::main.cpp[tags=glVertexAttribPointer]
+----
+
+==== pass:[C++] - `#include`
+
+We've already include `glm.hpp`, but we to allow us to perform matrix transformations in C++, we also need to import `gtc/matrix_transform.hpp`. We'll also include `cassert`, which lets are add debug-time assert statements - this is a quick way to make sure things are behaving as your expect, but only has an run-time impact in debug versions. Here, we're using them a quick tests - probably we should still have those tests in release code, so asserts aren't really the best tool, but they'll do for now.
+
+[source, cpp]
+----
+include::main.cpp[tags=includes]
+----
+
+==== pass:[C++] - gameState
+
+As we've now moved to 3D our gameState representation should also move to 3D. The positions and velocities of our models (our two triangles) should be in 3D. We'll also rename this variables make sense in terms of our game state - rather than how they are used for rendering. We expect our render function to able to figure out how to render appropriately from our game state.
+
+[source, cpp]
+----
+include::main.cpp[tags=gameState]
+----
+
+==== pass:[C++] - GLVariables
+
+We've added and removed some GLSL uniform variables, so we need to update our code to have storage for their identifiers, and to ask OpenGL for those identifiers.
+
+[source, cpp]
+----
+include::main.cpp[tags=GLVariables]
+----
+
+[source, cpp]
+----
+include::main.cpp[tags=glGetUniformLocation]
+----
+
+==== pass:[C++] - updateSimulation
+
+As we've also changed our game state variables, we need to change them in updateSimulation also.
+
+[source, cpp]
+----
+include::main.cpp[tags=updateSimulation]
+----
+
+==== pass:[C++] - render
+
+Our last change is to set the uniform variables on our GLSL program appropriately before each draw call.
+
+We'll set `viewMatrix` and `projectionMatrix` to the identify matrix ourselves, even though the GLSL will default them to the same.
+
+We'll construct `modelMatrix` using the position of each model, and `glm::translate`, then set that matrix on the `modelMatrix` uniform (for each model).
+
+[source, cpp]
+----
+include::main.cpp[tags=render]
+----
+
+NOTE: `glm::translate` takes a matrix as it's first parameter. This can be used to apply as translation to an existing matrix. For us, here we want to apply a translation to the identity matrix - so that is exactly what we supply.
+
+NOTE: `glUniformMatrix4fv` has a couple of extra parameters. It's worth looking them up to see what other options you have here.
