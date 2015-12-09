@@ -125,7 +125,7 @@ const GLfloat vertexData[] = {
 glm::vec3 position1 = { 0.0f, -0.5f, 0.0f };
 glm::vec3 velocity1 = { 0.1f, 0.1f, 0.0f};
 
-glm::vec3 position2 = { 0.0f, 0.5f, 0.0f };
+glm::vec3 position2 = { 1.0f, 0.5f, 0.0f };
 
 GLfloat rotation = 0.0f;
 
@@ -445,7 +445,7 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 			// see, for example, http://headerphile.blogspot.co.uk/2014/07/part-9-no-more-delays.html
 
 	//position1 += float(simLength) * velocity1;
-	rotation += 1.0f * simLength;
+	rotation += 0.1f * simLength;
 
 }
 // end::updateSimulation[]
@@ -469,10 +469,10 @@ void render()
 	glBindVertexArray(vertexArrayObject);
 
 	//set projectionMatrix - how we go from 3D to 2D
-	glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(glm::perspective(90.0f, 1.0f, 0.1f, 100.0f)));
+	glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f)));
 
 	//set viewMatrix - how we control the view (viewpoint, view direction, etc)
-	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(glm::mat4(1.0f)));
+	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(glm::lookAt(glm::vec3(4,3,3), glm::vec3(0,0,0), glm::vec3(0,1,0))));
 
 
 	//set modelMatrix and draw for triangle 1
