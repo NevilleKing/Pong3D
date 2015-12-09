@@ -442,7 +442,7 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 	//WARNING - we should calculate an appropriate amount of time to simulate - not always use a constant amount of time
 			// see, for example, http://headerphile.blogspot.co.uk/2014/07/part-9-no-more-delays.html
 
-	//position1 += float(simLength) * velocity1;
+	paddle1Position.x += simLength * 0.01;
 
 }
 // end::updateSimulation[]
@@ -470,7 +470,7 @@ void render()
 	glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
 
 	//set viewMatrix - how we control the view (viewpoint, view direction, etc)
-	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(0, 2, 3), paddle1Position + glm::vec3(0,1,0), glm::vec3(0, 1, 0)); // looks at the closest paddle
+	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(paddle1Position.x, 2, 3), paddle1Position + glm::vec3(0,1,0), glm::vec3(0, 1, 0)); // looks at the closest paddle
 	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
 
 	glm::mat4 modelMatrix = glm::mat4(1.0);
