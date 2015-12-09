@@ -483,6 +483,9 @@ void render()
 
 	modelMatrix = glm::translate(modelMatrix, paddle2Position);
 
+	// rotate so a different side is showing
+	modelMatrix = glm::rotate(modelMatrix, glm::radians(180.0f), glm::vec3(1, 0, 0));
+
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
