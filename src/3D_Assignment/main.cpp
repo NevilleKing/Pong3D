@@ -122,8 +122,11 @@ const GLfloat vertexData[] = {
 
 // tag::gameState[]
 //the translation vector we'll pass to our GLSL program
-glm::vec3 position1 = { -0.5f, -0.5f, 0.0f};
+glm::vec3 position1 = { 0.0f, -0.5f, 0.0f };
 glm::vec3 velocity1 = { 0.1f, 0.1f, 0.0f};
+
+glm::vec3 position2 = { 0.0f, 0.5f, 0.0f };
+
 GLfloat rotation = 0.0f;
 
 // end::gameState[]
@@ -441,7 +444,7 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 	//WARNING - we should calculate an appropriate amount of time to simulate - not always use a constant amount of time
 			// see, for example, http://headerphile.blogspot.co.uk/2014/07/part-9-no-more-delays.html
 
-	position1 += float(simLength) * velocity1;
+	//position1 += float(simLength) * velocity1;
 	rotation += 1.0f * simLength;
 
 }
@@ -466,7 +469,7 @@ void render()
 	glBindVertexArray(vertexArrayObject);
 
 	//set projectionMatrix - how we go from 3D to 2D
-	glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(glm::mat4(1.0)));
+	glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(glm::perspective(90.0f, 1.0f, 0.1f, 100.0f)));
 
 	//set viewMatrix - how we control the view (viewpoint, view direction, etc)
 	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(glm::mat4(1.0f)));
@@ -475,9 +478,20 @@ void render()
 	//set modelMatrix and draw for triangle 1
 	//glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), position1);
 	glm::mat4 modelMatrix = glm::mat4(1.0);
-	//modelMatrix = glm::translate(modelMatrix, position1);
-	//modelMatrix = glm::rotate(modelMatrix, rotation, glm::vec3(1.0, 1.0, 0.0));
+	modelMatrix = glm::translate(modelMatrix, position1);
+
 	modelMatrix = glm::rotate(modelMatrix, rotation, glm::vec3(1.0, 1.0, 0.0));
+
+
+	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	modelMatrix = glm::mat4(1.0);
+
+	modelMatrix = glm::translate(modelMatrix, position2);
+
+	modelMatrix = glm::rotate(modelMatrix, rotation, glm::vec3(1.0, 1.0, 0.0));
+
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
