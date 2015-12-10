@@ -177,8 +177,8 @@ const GLfloat worldBoundsVertexData[] = {
 
 // tag::gameState[]
 //the translation vector we'll pass to our GLSL program
-glm::vec3 paddle1Position = { 0.0f, 0.0f, 0.0f };
-glm::vec3 paddle2Position = { 0.0f, 0.0f, -4.0f };
+glm::vec3 paddle1Position = { 0.0f, 0.0f, 2.0f };
+glm::vec3 paddle2Position = { 0.0f, 0.0f, -2.0f };
 
 GLfloat paddleVelocity = 1.2;
 
@@ -516,16 +516,16 @@ void handleInput()
 					case SDLK_ESCAPE: done = true;
 						break;
 					case SDLK_a:
-						paddle1Direction += 1.0;
+						paddle2Direction -= 1.0;
 						break;
 					case SDLK_s:
-						paddle1Direction -= 1.0;
-						break;
-					case SDLK_LEFT:
 						paddle2Direction += 1.0;
 						break;
+					case SDLK_LEFT:
+						paddle1Direction -= 1.0;
+						break;
 					case SDLK_RIGHT:
-						paddle2Direction -= 1.0;
+						paddle1Direction += 1.0;
 						break;
 				}
 			break;
@@ -534,16 +534,16 @@ void handleInput()
 				switch (event.key.keysym.sym)
 				{
 					case SDLK_a:
-						paddle1Direction -= 1.0;
+						paddle2Direction += 1.0;
 						break;
 					case SDLK_s:
-						paddle1Direction += 1.0;
-						break;
-					case SDLK_LEFT:
 						paddle2Direction -= 1.0;
 						break;
+					case SDLK_LEFT:
+						paddle1Direction += 1.0;
+						break;
 					case SDLK_RIGHT:
-						paddle2Direction += 1.0;
+						paddle1Direction -= 1.0;
 						break;
 				}
 			break;
@@ -605,7 +605,7 @@ void render()
 	glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
 
 	//set viewMatrix - how we control the view (viewpoint, view direction, etc)
-	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(paddle1Position.x, 2, 3), paddle1Position + glm::vec3(0,1,0), glm::vec3(0, 1, 0)); // looks at the closest paddle
+	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(paddle1Position.x, 2, 5), paddle1Position, glm::vec3(0, 1, 0)); // looks at the closest paddle
 	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
 
 	// PADDLES ------------------------------------------------------------------------------------
@@ -630,8 +630,10 @@ void render()
 
 	glBindVertexArray(worldBoundspaddleVertexArrayObject);
 
+	// bottom
 	modelMatrix = glm::mat4(1.0);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0,0,0));
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0,0,3));
+	modelMatrix *= glm::vec4(5, 1, 1, 1);
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
