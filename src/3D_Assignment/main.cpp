@@ -72,7 +72,7 @@ high_resolution_clock::time_point timePrev;
 
 // tag::vertexData[]
 //the data about our geometry
-const GLfloat vertexData[] = {
+const GLfloat paddleVertexData[] = {
 //	    X        Y        Z        R     G     B      A
 // Front face
 	-0.250f, -0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 4
@@ -150,8 +150,8 @@ GLint modelMatrixLocation;
 GLint viewMatrixLocation;
 GLint projectionMatrixLocation;
 
-GLuint vertexDataBufferObject;
-GLuint vertexArrayObject;
+GLuint paddleVertexDataBufferObject;
+GLuint paddleVertexArrayObject;
 // end::GLVariables[]
 
 
@@ -351,12 +351,12 @@ void initializeProgram()
 //setup a GL object (a VertexArrayObject) that stores how to access data and from where
 void initializeVertexArrayObject()
 {
-	glGenVertexArrays(1, &vertexArrayObject); //create a Vertex Array Object
-	cout << "Vertex Array Object created OK! GLUint is: " << vertexArrayObject << std::endl;
+	glGenVertexArrays(1, &paddleVertexArrayObject); //create a Vertex Array Object
+	cout << "Vertex Array Object created OK! GLUint is: " << paddleVertexArrayObject << std::endl;
 
-	glBindVertexArray(vertexArrayObject); //make the just created vertexArrayObject the active one
+	glBindVertexArray(paddleVertexArrayObject); //make the just created vertexArrayObject the active one
 
-		glBindBuffer(GL_ARRAY_BUFFER, vertexDataBufferObject); //bind vertexDataBufferObject
+		glBindBuffer(GL_ARRAY_BUFFER, paddleVertexDataBufferObject); //bind vertexDataBufferObject
 
 		glEnableVertexAttribArray(positionLocation); //enable attribute at index positionLocation
 		glEnableVertexAttribArray(vertexColorLocation); //enable attribute at index vertexColorLocation
@@ -378,12 +378,12 @@ void initializeVertexArrayObject()
 // tag::initializeVertexBuffer[]
 void initializeVertexBuffer()
 {
-	glGenBuffers(1, &vertexDataBufferObject);
+	glGenBuffers(1, &paddleVertexDataBufferObject);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertexDataBufferObject);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, paddleVertexDataBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(paddleVertexData), paddleVertexData, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	cout << "vertexDataBufferObject created OK! GLUint is: " << vertexDataBufferObject << std::endl;
+	cout << "vertexDataBufferObject created OK! GLUint is: " << paddleVertexDataBufferObject << std::endl;
 
 	initializeVertexArrayObject();
 }
@@ -522,7 +522,7 @@ void render()
 {
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
 
-	glBindVertexArray(vertexArrayObject);
+	glBindVertexArray(paddleVertexArrayObject);
 
 	//set projectionMatrix - how we go from 3D to 2D
 	glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f); // perspective - makes things further away smaller
