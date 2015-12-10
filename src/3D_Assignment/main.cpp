@@ -19,6 +19,8 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 
+#include <chrono>
+
 #define GLM_FORCE_RADIANS // suppress a warning in GLM 0.9.5
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -33,6 +35,7 @@ using std::cerr;
 using std::endl;
 using std::max;
 using std::string;
+using namespace std::chrono;
 // end::using[]
 
 
@@ -65,6 +68,7 @@ std::string loadShader(const string filePath) {
 
 //our variables
 bool done = false;
+high_resolution_clock::time_point timePrev;
 
 // tag::vertexData[]
 //the data about our geometry
@@ -125,7 +129,10 @@ const GLfloat vertexData[] = {
 glm::vec3 paddle1Position = { 0.0f, 0.0f, 0.0f };
 glm::vec3 paddle2Position = { 0.0f, 0.0f, -4.0f };
 
-GLfloat paddleVelocity = 0.1;
+GLfloat paddleVelocity = 1.2;
+
+GLfloat paddle1Direction = 0.0;
+GLfloat paddle2Direction = 0.0;
 
 // end::gameState[]
 
@@ -390,6 +397,8 @@ void loadAssets()
 	initializeVertexBuffer(); //load data into a vertex buffer
 
 	cout << "Loaded Assets OK!\n";
+
+	timePrev = high_resolution_clock::now(); // set the last time
 }
 // end::loadAssets[]
 
@@ -429,6 +438,37 @@ void handleInput()
 				{
 					//hit escape to exit
 					case SDLK_ESCAPE: done = true;
+						break;
+					case SDLK_a:
+						paddle1Direction += 1.0;
+						break;
+					case SDLK_s:
+						paddle1Direction -= 1.0;
+						break;
+					case SDLK_LEFT:
+						paddle2Direction += 1.0;
+						break;
+					case SDLK_RIGHT:
+						paddle2Direction -= 1.0;
+						break;
+				}
+			break;
+		case SDL_KEYUP:
+			if (!event.key.repeat)
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_a:
+						paddle1Direction -= 1.0;
+						break;
+					case SDLK_s:
+						paddle1Direction += 1.0;
+						break;
+					case SDLK_LEFT:
+						paddle2Direction -= 1.0;
+						break;
+					case SDLK_RIGHT:
+						paddle2Direction += 1.0;
+						break;
 				}
 			break;
 		}
@@ -436,13 +476,32 @@ void handleInput()
 }
 // end::handleInput[]
 
+// Get Delta Function - used to make sure the animation is smooth on all computers
+GLdouble getDelta()
+{
+	auto timeCurrent = high_resolution_clock::now();
+
+	auto timeDiff = duration_cast<nanoseconds>(timeCurrent - timePrev);
+
+	GLdouble delta = timeDiff.count();
+
+	delta /= 1000000000;
+
+	timePrev = timeCurrent;
+
+	return delta;
+}
+
 // tag::updateSimulation[]
 void updateSimulation(double simLength = 0.02) //update simulation with an amount of time to simulate for (in seconds)
 {
 	//WARNING - we should calculate an appropriate amount of time to simulate - not always use a constant amount of time
 			// see, for example, http://headerphile.blogspot.co.uk/2014/07/part-9-no-more-delays.html
 
-	paddle1Position.x += simLength * 0.01;
+	GLdouble delta = getDelta();
+
+	paddle1Position.x += (paddleVelocity * delta * paddle1Direction);
+	paddle2Position.x += (paddleVelocity * delta * paddle2Direction);
 
 }
 // end::updateSimulation[]
