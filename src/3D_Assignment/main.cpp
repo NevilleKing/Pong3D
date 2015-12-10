@@ -72,7 +72,7 @@ high_resolution_clock::time_point timePrev;
 
 // tag::vertexData[]
 //the data about our geometry
-const GLfloat vertexData[] = {
+const GLfloat paddleVertexData[] = {
 //	    X        Y        Z        R     G     B      A
 // Front face
 	-0.250f, -0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 4
@@ -122,6 +122,57 @@ const GLfloat vertexData[] = {
 	 0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 6
 	-0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 5
 };
+
+const GLfloat worldBoundsVertexData[] = {
+	//	    X        Y        Z        R     G     B      A
+	// Front face
+	-0.250f, -0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 4
+	-0.250f,  0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
+	 0.250f, -0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
+	-0.250f,  0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
+	 0.250f, -0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
+	 0.250f,  0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 2
+
+														  // Back face
+	-0.250f, -0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 8
+	-0.250f,  0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 5
+	 0.250f, -0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 7
+	-0.250f,  0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 5
+	 0.250f, -0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 7
+	 0.250f,  0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 6
+
+														  // Left Face
+	-0.250f, -0.125f, -0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 4
+	-0.250f,  0.125f, -0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 1
+	-0.250f, -0.125f,  0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 8
+	-0.250f,  0.125f, -0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 1
+	-0.250f,  0.125f,  0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 5
+	-0.250f, -0.125f,  0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 8
+
+														   // Right Face
+	 0.250f,  0.125f, -0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 2
+	 0.250f, -0.125f, -0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 3
+	 0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 7
+	 0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 7
+	 0.250f,  0.125f,  0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 6
+	 0.250f,  0.125f, -0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 2
+
+														  // Bottom Face
+	-0.250f, -0.125f, -0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 4
+	-0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 8
+	0.250f, -0.125f, -0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 3
+	0.250f, -0.125f, -0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 3
+	0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 7
+	-0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 8
+
+														   // Top Face
+	-0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 5
+	-0.250f,  0.125f, -0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 1
+	0.250f,  0.125f, -0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 2
+	0.250f,  0.125f, -0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 2
+	0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 6
+	-0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 5
+};
 // end::vertexData[]
 
 // tag::gameState[]
@@ -152,6 +203,9 @@ GLint projectionMatrixLocation;
 
 GLuint vertexDataBufferObject;
 GLuint vertexArrayObject;
+
+GLuint worldBoundsDataBufferObject;
+GLuint worldBoundsVertexArrayObject;
 // end::GLVariables[]
 
 
@@ -354,6 +408,9 @@ void initializeVertexArrayObject()
 	glGenVertexArrays(1, &vertexArrayObject); //create a Vertex Array Object
 	cout << "Vertex Array Object created OK! GLUint is: " << vertexArrayObject << std::endl;
 
+	glGenVertexArrays(1, &worldBoundsVertexArrayObject); //create a Vertex Array Object
+	cout << "worldBoundsVertexArrayObject created OK! GLUint is: " << worldBoundsVertexArrayObject << std::endl;
+
 	glBindVertexArray(vertexArrayObject); //make the just created vertexArrayObject the active one
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertexDataBufferObject); //bind vertexDataBufferObject
@@ -365,6 +422,18 @@ void initializeVertexArrayObject()
 		glVertexAttribPointer(positionLocation,    3, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *) (0 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index positionLocation
 		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *) (3 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index vertexColorLocation
 		// end::glVertexAttribPointer[]
+
+	glBindVertexArray(worldBoundsVertexArrayObject); //make the just created vertexArrayObject the active one
+
+		glBindBuffer(GL_ARRAY_BUFFER, worldBoundsDataBufferObject); //bind vertexDataBufferObject
+
+		glEnableVertexAttribArray(positionLocation); //enable attribute at index positionLocation
+		glEnableVertexAttribArray(vertexColorLocation); //enable attribute at index vertexColorLocation
+
+														// tag::glVertexAttribPointer[]
+		glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *)(0 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index positionLocation
+		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *)(3 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index vertexColorLocation
+																																	// end::glVertexAttribPointer[]
 
 	glBindVertexArray(0); //unbind the vertexArrayObject so we can't change it
 
@@ -379,11 +448,17 @@ void initializeVertexArrayObject()
 void initializeVertexBuffer()
 {
 	glGenBuffers(1, &vertexDataBufferObject);
+	glGenBuffers(1, &worldBoundsDataBufferObject);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexDataBufferObject);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(paddleVertexData), paddleVertexData, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	cout << "vertexDataBufferObject created OK! GLUint is: " << vertexDataBufferObject << std::endl;
+
+	glBindBuffer(GL_ARRAY_BUFFER, worldBoundsDataBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(worldBoundsVertexData), worldBoundsVertexData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	cout << "worldBoundsVertexData created OK! GLUint is: " << worldBoundsVertexData << std::endl;
 
 	initializeVertexArrayObject();
 }
@@ -532,7 +607,21 @@ void render()
 	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(paddle1Position.x, 2, 3), paddle1Position + glm::vec3(0,1,0), glm::vec3(0, 1, 0)); // looks at the closest paddle
 	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
 
+	// WORLD BOUNDARIES -------------------------------------------------------------------------
+
+	glBindVertexArray(worldBoundsVertexArrayObject);
+
 	glm::mat4 modelMatrix = glm::mat4(1.0);
+
+	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	// PADDLES -------------------------------------------------------------------------
+
+	glBindVertexArray(vertexArrayObject);
+
+	modelMatrix = glm::mat4(1.0);
 	modelMatrix = glm::translate(modelMatrix, paddle1Position);
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
