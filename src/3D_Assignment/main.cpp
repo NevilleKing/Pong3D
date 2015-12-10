@@ -608,6 +608,8 @@ void render()
 	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(paddle1Position.x, 2, 3), paddle1Position + glm::vec3(0,1,0), glm::vec3(0, 1, 0)); // looks at the closest paddle
 	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
 
+	// PADDLES ------------------------------------------------------------------------------------
+
 	glm::mat4 modelMatrix = glm::mat4(1.0);
 	modelMatrix = glm::translate(modelMatrix, paddle1Position);
 
@@ -620,6 +622,16 @@ void render()
 
 	// rotate so a different side is showing
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(180.0f), glm::vec3(1, 0, 0));
+
+	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	// WORLD BOUNDS -------------------------------------------------------------------------------
+
+	glBindVertexArray(worldBoundspaddleVertexArrayObject);
+
+	modelMatrix = glm::mat4(1.0);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0,0,0));
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
