@@ -177,8 +177,8 @@ const GLfloat worldBoundsVertexData[] = {
 
 // tag::gameState[]
 //the translation vector we'll pass to our GLSL program
-glm::vec3 paddle1Position = { 0.0f, 0.0f,  2.0f };
-glm::vec3 paddle2Position = { 0.0f, 0.0f, -2.0f };
+glm::vec3 paddle1Position = { 0.0f, 0.0f, 0.0f };
+glm::vec3 paddle2Position = { 0.0f, 0.0f, -4.0f };
 
 GLfloat paddleVelocity = 1.2;
 
@@ -515,16 +515,16 @@ void handleInput()
 					case SDLK_ESCAPE: done = true;
 						break;
 					case SDLK_a:
-						paddle2Direction += 1.0;
-						break;
-					case SDLK_s:
-						paddle2Direction -= 1.0;
-						break;
-					case SDLK_LEFT:
 						paddle1Direction += 1.0;
 						break;
-					case SDLK_RIGHT:
+					case SDLK_s:
 						paddle1Direction -= 1.0;
+						break;
+					case SDLK_LEFT:
+						paddle2Direction += 1.0;
+						break;
+					case SDLK_RIGHT:
+						paddle2Direction -= 1.0;
 						break;
 				}
 			break;
@@ -533,16 +533,16 @@ void handleInput()
 				switch (event.key.keysym.sym)
 				{
 					case SDLK_a:
-						paddle2Direction -= 1.0;
-						break;
-					case SDLK_s:
-						paddle2Direction += 1.0;
-						break;
-					case SDLK_LEFT:
 						paddle1Direction -= 1.0;
 						break;
-					case SDLK_RIGHT:
+					case SDLK_s:
 						paddle1Direction += 1.0;
+						break;
+					case SDLK_LEFT:
+						paddle2Direction -= 1.0;
+						break;
+					case SDLK_RIGHT:
+						paddle2Direction += 1.0;
 						break;
 				}
 			break;
@@ -595,29 +595,29 @@ void preRender()
 // tag::render[]
 void render()
 {
-	frameLine += "Paddle1: " + std::to_string(paddle1Position.x) + " Paddle2: " + std::to_string(paddle2Position.x);
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
+
+	glBindVertexArray(vertexArrayObject);
 
 	//set projectionMatrix - how we go from 3D to 2D
 	glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f); // perspective - makes things further away smaller
 	glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
 
 	//set viewMatrix - how we control the view (viewpoint, view direction, etc)
-	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(paddle1Position.x, 2, 3), paddle1Position + glm::vec3(0,1,-2), glm::vec3(0, 1, 0)); // looks at the closest paddle
+	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(paddle1Position.x, 2, 3), paddle1Position + glm::vec3(0,1,0), glm::vec3(0, 1, 0)); // looks at the closest paddle
 	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
 
 	// WORLD BOUNDARIES -------------------------------------------------------------------------
 
 	glBindVertexArray(worldBoundsVertexArrayObject);
-	
+
 	glm::mat4 modelMatrix = glm::mat4(1.0);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, 0));
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	// PADDLES ----------------------------------------------------------------------------------
+	// PADDLES -------------------------------------------------------------------------
 
 	glBindVertexArray(vertexArrayObject);
 
