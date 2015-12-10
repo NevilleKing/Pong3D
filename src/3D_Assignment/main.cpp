@@ -638,6 +638,14 @@ void render()
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
+	// top
+	modelMatrix = glm::mat4(1.0);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, -3));
+	modelMatrix *= glm::vec4(5, 1, 1, 1);
+
+	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
 	glBindVertexArray(0);
 
 	glUseProgram(0); //clean up
