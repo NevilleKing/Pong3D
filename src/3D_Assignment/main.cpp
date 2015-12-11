@@ -173,6 +173,57 @@ const GLfloat worldBoundsVertexData[] = {
 	0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 6
 	-0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 5
 };
+
+const GLfloat ballVertexData[] = {
+	//	    X        Y        Z        R     G     B      A
+	// Front face
+	-0.250f, -0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 4
+	-0.250f,  0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
+	0.250f, -0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
+	-0.250f,  0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
+	0.250f, -0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
+	0.250f,  0.125f, -0.125f,    1.0f, 0.0f, 0.0f,  1.0f, // 2
+
+														  // Back face
+	-0.250f, -0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 8
+	-0.250f,  0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 5
+	0.250f, -0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 7
+	-0.250f,  0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 5
+	0.250f, -0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 7
+	0.250f,  0.125f,  0.125f,    0.0f, 1.0f, 0.0f,  1.0f, // 6
+
+														  // Left Face
+	-0.250f, -0.125f, -0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 4
+	-0.250f,  0.125f, -0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 1
+	-0.250f, -0.125f,  0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 8
+	-0.250f,  0.125f, -0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 1
+	-0.250f,  0.125f,  0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 5
+	-0.250f, -0.125f,  0.125f,    0.0f, 0.0f, 1.0f,  1.0f, // 8
+
+														   // Right Face
+	0.250f,  0.125f, -0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 2
+	0.250f, -0.125f, -0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 3
+	0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 7
+	0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 7
+	0.250f,  0.125f,  0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 6
+	0.250f,  0.125f, -0.125f,    0.0f, 0.5f, 0.0f,  1.0f, // 2
+
+														  // Bottom Face
+	-0.250f, -0.125f, -0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 4
+	-0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 8
+	0.250f, -0.125f, -0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 3
+	0.250f, -0.125f, -0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 3
+	0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 7
+	-0.250f, -0.125f,  0.125f,    0.0f, 0.5f, 0.5f,  1.0f, // 8
+
+														   // Top Face
+	-0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 5
+	-0.250f,  0.125f, -0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 1
+	0.250f,  0.125f, -0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 2
+	0.250f,  0.125f, -0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 2
+	0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 6
+	-0.250f,  0.125f,  0.125f,    0.5f, 0.5f, 0.0f,  1.0f, // 5
+};
 // end::vertexData[]
 
 // tag::gameState[]
@@ -205,7 +256,10 @@ GLuint paddleVertexDataBufferObject;
 GLuint paddleVertexArrayObject;
 
 GLuint worldBoundsVertexDataBufferObject;
-GLuint worldBoundspaddleVertexArrayObject;
+GLuint worldBoundsVertexArrayObject;
+
+GLuint ballVertexDataBufferObject;
+GLuint ballVertexArrayObject;
 // end::GLVariables[]
 
 
@@ -408,8 +462,11 @@ void initializeVertexArrayObject()
 	glGenVertexArrays(1, &paddleVertexArrayObject); //create a Vertex Array Object
 	cout << "Vertex Array Object created OK! GLUint is: " << paddleVertexArrayObject << std::endl;
 
-	glGenVertexArrays(1, &worldBoundspaddleVertexArrayObject); //create a Vertex Array Object
-	cout << "World bounds Vertex Array Object created OK! GLUint is: " << worldBoundspaddleVertexArrayObject << std::endl;
+	glGenVertexArrays(1, &worldBoundsVertexArrayObject); //create a Vertex Array Object
+	cout << "World bounds Vertex Array Object created OK! GLUint is: " << worldBoundsVertexArrayObject << std::endl;
+
+	glGenVertexArrays(1, &ballVertexArrayObject); //create a Vertex Array Object
+	cout << "Ball Vertex Array Object created OK! GLUint is: " << ballVertexArrayObject << std::endl;
 
 	glBindVertexArray(paddleVertexArrayObject); //make the just created vertexArrayObject the active one
 
@@ -423,17 +480,29 @@ void initializeVertexArrayObject()
 		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *) (3 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index vertexColorLocation
 		// end::glVertexAttribPointer[]
 
-	glBindVertexArray(worldBoundspaddleVertexArrayObject); //make the just created vertexArrayObject the active one
+	glBindVertexArray(worldBoundsVertexArrayObject); //make the just created vertexArrayObject the active one
 
 		glBindBuffer(GL_ARRAY_BUFFER, worldBoundsVertexDataBufferObject); //bind vertexDataBufferObject
 
 		glEnableVertexAttribArray(positionLocation); //enable attribute at index positionLocation
 		glEnableVertexAttribArray(vertexColorLocation); //enable attribute at index vertexColorLocation
 
-														// tag::glVertexAttribPointer[]
+		// tag::glVertexAttribPointer[]
 		glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *)(0 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index positionLocation
 		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *)(3 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index vertexColorLocation
-																																	// end::glVertexAttribPointer[]
+		// end::glVertexAttribPointer[]
+
+	glBindVertexArray(ballVertexArrayObject); //make the just created vertexArrayObject the active one
+
+		glBindBuffer(GL_ARRAY_BUFFER, ballVertexDataBufferObject); //bind vertexDataBufferObject
+
+		glEnableVertexAttribArray(positionLocation); //enable attribute at index positionLocation
+		glEnableVertexAttribArray(vertexColorLocation); //enable attribute at index vertexColorLocation
+
+		// tag::glVertexAttribPointer[]
+		glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *)(0 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index positionLocation
+		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *)(3 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index vertexColorLocation
+		// end::glVertexAttribPointer[]
 
 	glBindVertexArray(0); //unbind the vertexArrayObject so we can't change it
 
@@ -460,6 +529,13 @@ void initializeVertexBuffer()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(worldBoundsVertexData), worldBoundsVertexData, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	cout << "World Bounds vertexDataBufferObject created OK! GLUint is: " << paddleVertexDataBufferObject << std::endl;
+
+	glGenBuffers(1, &ballVertexDataBufferObject);
+
+	glBindBuffer(GL_ARRAY_BUFFER, ballVertexDataBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(ballVertexData), ballVertexData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	cout << "Ball vertexDataBufferObject created OK! GLUint is: " << paddleVertexDataBufferObject << std::endl;
 
 	initializeVertexArrayObject();
 }
@@ -628,7 +704,7 @@ void render()
 
 	// WORLD BOUNDS -------------------------------------------------------------------------------
 
-	glBindVertexArray(worldBoundspaddleVertexArrayObject);
+	glBindVertexArray(worldBoundsVertexArrayObject);
 
 	// bottom
 	modelMatrix = glm::mat4(1.0);
@@ -660,6 +736,16 @@ void render()
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(-1.3, 0, 0));
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(0, 1, 0));
 	modelMatrix *= glm::vec4(1, 1, 12.5, 1);
+
+	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	// BALL ---------------------------------------------------------------------------------------
+
+	glBindVertexArray(ballVertexArrayObject);
+
+	modelMatrix = glm::mat4(1.0);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, 0));
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
