@@ -262,6 +262,12 @@ GLuint ballVertexDataBufferObject;
 GLuint ballVertexArrayObject;
 // end::GLVariables[]
 
+// Constant variables - Only used for collision detection
+const GLfloat PADDLE_WIDTH = 0;
+const GLfloat AREA_WIDTH = 2.6; // The play area
+const GLfloat AREA_DEPTH = 6;
+const GLfloat WORLD_BOUNDS_WIDTH =
+const GLfloat BALL_WIDTH = 0.1;
 
 
 // end Global Variables
@@ -672,6 +678,8 @@ void preRender()
 // tag::render[]
 void render()
 {
+	frameLine += "Player1x: " + std::to_string(paddle1Position.x);
+
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
 
 	glBindVertexArray(paddleVertexArrayObject);
@@ -708,7 +716,7 @@ void render()
 
 	// bottom
 	modelMatrix = glm::mat4(1.0);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0,0,3));
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0,0,AREA_DEPTH/2));
 	modelMatrix *= glm::vec4(5, 1, 1, 1);
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
@@ -716,7 +724,7 @@ void render()
 
 	// top
 	modelMatrix = glm::mat4(1.0);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, -3));
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, -AREA_DEPTH/2));
 	modelMatrix *= glm::vec4(5, 1, 1, 1);
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
@@ -724,7 +732,7 @@ void render()
 
 	// right
 	modelMatrix = glm::mat4(1.0);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(1.3, 0, 0));
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(AREA_WIDTH/2, 0, 0));
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(-90.0f), glm::vec3(0, 1, 0));
 	modelMatrix *= glm::vec4(1, 1, 12.5, 1);
 
@@ -733,7 +741,7 @@ void render()
 
 	// left
 	modelMatrix = glm::mat4(1.0);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(-1.3, 0, 0));
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(-AREA_WIDTH/2, 0, 0));
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(0, 1, 0));
 	modelMatrix *= glm::vec4(1, 1, 12.5, 1);
 
