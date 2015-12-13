@@ -232,9 +232,13 @@ glm::vec3 paddle1Position = { 0.0f, 0.0f, 2.0f };
 glm::vec3 paddle2Position = { 0.0f, 0.0f, -2.0f };
 
 GLfloat paddleVelocity = 1.2;
+GLfloat ballVelocity = 1.0;
 
 GLfloat paddle1Direction = 0.0;
 GLfloat paddle2Direction = 0.0;
+
+glm::vec3 ballPosition = glm::vec3(0, 0, 0);
+glm::vec3 ballDirection = glm::vec3(1, 0, 0);
 
 // end::gameState[]
 
@@ -650,16 +654,26 @@ GLdouble getDelta()
 	return delta;
 }
 
-void checkPaddleBounds(GLfloat* value, bool leftSide)
+bool checkSideBounds(GLfloat* value, bool leftSide, const GLfloat ITEM_WIDTH)
 {
 	if (leftSide)
 	{
-		if (*value < (-AREA_WIDTH / 2) + PADDLE_WIDTH / 2 + WORLD_BOUNDS_WIDTH / 2)
-			*value = ((-AREA_WIDTH / 2) + PADDLE_WIDTH / 2 + WORLD_BOUNDS_WIDTH / 2);
+		if (*value < (-AREA_WIDTH / 2) + ITEM_WIDTH / 2 + WORLD_BOUNDS_WIDTH / 2)
+		{
+			*value = ((-AREA_WIDTH / 2) + ITEM_WIDTH / 2 + WORLD_BOUNDS_WIDTH / 2);
+			return true;
+		}
+		else
+			return false;
 	}
 	else {
-		if (*value > (AREA_WIDTH / 2) - PADDLE_WIDTH / 2 - WORLD_BOUNDS_WIDTH / 2)
-			*value = ((AREA_WIDTH / 2) - PADDLE_WIDTH / 2 - WORLD_BOUNDS_WIDTH / 2);
+		if (*value > (AREA_WIDTH / 2) - ITEM_WIDTH / 2 - WORLD_BOUNDS_WIDTH / 2)
+		{
+			*value = ((AREA_WIDTH / 2) - ITEM_WIDTH / 2 - WORLD_BOUNDS_WIDTH / 2);
+			return true;
+		}
+		else
+			return false;
 	}
 }
 
@@ -673,14 +687,18 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 
 	paddle1Position.x += (paddleVelocity * delta * paddle1Direction);
 
-	checkPaddleBounds(&paddle1Position.x, true);
-	checkPaddleBounds(&paddle1Position.x, false);
+	checkSideBounds(&paddle1Position.x, true, PADDLE_WIDTH);
+	checkSideBounds(&paddle1Position.x, false, PADDLE_WIDTH);
 
 	paddle2Position.x += (paddleVelocity * delta * paddle2Direction);
 
-	checkPaddleBounds(&paddle2Position.x, true);
-	checkPaddleBounds(&paddle2Position.x, false);
+	checkSideBounds(&paddle2Position.x, true, PADDLE_WIDTH);
+	checkSideBounds(&paddle2Position.x, false, PADDLE_WIDTH);
 
+	// move the ball
+	ballPosition.x += ballDirection.x * ballVelocity * delta;
+	if (checkSideBounds(&ballPosition.x, false, BALL_WIDTH) || checkSideBounds(&ballPosition.x, true, BALL_WIDTH))
+		ballDirection.x = -ballDirection.x;
 }
 // end::updateSimulation[]
 
@@ -698,8 +716,6 @@ void preRender()
 // tag::render[]
 void render()
 {
-	frameLine += "Player1x: " + std::to_string(paddle1Position.x);
-
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
 
 	glBindVertexArray(paddleVertexArrayObject);
@@ -773,7 +789,7 @@ void render()
 	glBindVertexArray(ballVertexArrayObject);
 
 	modelMatrix = glm::mat4(1.0);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, 0));
+	modelMatrix = glm::translate(modelMatrix, ballPosition);
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
