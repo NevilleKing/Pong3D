@@ -263,10 +263,10 @@ GLuint ballVertexArrayObject;
 // end::GLVariables[]
 
 // Constant variables - Only used for collision detection
-const GLfloat PADDLE_WIDTH = 0;
+const GLfloat PADDLE_WIDTH = 0.5;
 const GLfloat AREA_WIDTH = 2.6; // The play area
 const GLfloat AREA_DEPTH = 6;
-const GLfloat WORLD_BOUNDS_WIDTH =
+const GLfloat WORLD_BOUNDS_WIDTH = 0.25;
 const GLfloat BALL_WIDTH = 0.1;
 
 
@@ -650,6 +650,19 @@ GLdouble getDelta()
 	return delta;
 }
 
+void checkPaddleBounds(GLfloat* value, bool leftSide)
+{
+	if (leftSide)
+	{
+		if (*value < (-AREA_WIDTH / 2) + PADDLE_WIDTH / 2 + WORLD_BOUNDS_WIDTH / 2)
+			*value = ((-AREA_WIDTH / 2) + PADDLE_WIDTH / 2 + WORLD_BOUNDS_WIDTH / 2);
+	}
+	else {
+		if (*value > (AREA_WIDTH / 2) - PADDLE_WIDTH / 2 - WORLD_BOUNDS_WIDTH / 2)
+			*value = ((AREA_WIDTH / 2) - PADDLE_WIDTH / 2 - WORLD_BOUNDS_WIDTH / 2);
+	}
+}
+
 // tag::updateSimulation[]
 void updateSimulation(double simLength = 0.02) //update simulation with an amount of time to simulate for (in seconds)
 {
@@ -659,7 +672,14 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 	GLdouble delta = getDelta();
 
 	paddle1Position.x += (paddleVelocity * delta * paddle1Direction);
+
+	checkPaddleBounds(&paddle1Position.x, true);
+	checkPaddleBounds(&paddle1Position.x, false);
+
 	paddle2Position.x += (paddleVelocity * delta * paddle2Direction);
+
+	checkPaddleBounds(&paddle2Position.x, true);
+	checkPaddleBounds(&paddle2Position.x, false);
 
 }
 // end::updateSimulation[]
