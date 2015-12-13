@@ -238,7 +238,7 @@ GLfloat paddle1Direction = 0.0;
 GLfloat paddle2Direction = 0.0;
 
 glm::vec3 ballPosition = glm::vec3(0, 0, 0);
-glm::vec3 ballDirection = glm::vec3(1, 0, 0);
+glm::vec3 ballDirection = glm::vec3(1, 0, 1);
 
 // end::gameState[]
 
@@ -683,10 +683,13 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 	//WARNING - we should calculate an appropriate amount of time to simulate - not always use a constant amount of time
 			// see, for example, http://headerphile.blogspot.co.uk/2014/07/part-9-no-more-delays.html
 
+	// get delta time - makes sure that speed is same on all computers
 	GLdouble delta = getDelta();
 
+	// move paddle
 	paddle1Position.x += (paddleVelocity * delta * paddle1Direction);
 
+	// make sure that the paddles can't go out of bounds
 	checkSideBounds(&paddle1Position.x, true, PADDLE_WIDTH);
 	checkSideBounds(&paddle1Position.x, false, PADDLE_WIDTH);
 
@@ -696,7 +699,9 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 	checkSideBounds(&paddle2Position.x, false, PADDLE_WIDTH);
 
 	// move the ball
-	ballPosition.x += ballDirection.x * ballVelocity * delta;
+	ballPosition += ballDirection * ballVelocity * (GLfloat)delta;
+	
+	// reverse the direction of the ball if it hits the side wall
 	if (checkSideBounds(&ballPosition.x, false, BALL_WIDTH) || checkSideBounds(&ballPosition.x, true, BALL_WIDTH))
 		ballDirection.x = -ballDirection.x;
 }
