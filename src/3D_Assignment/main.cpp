@@ -228,12 +228,12 @@ const GLfloat ballVertexData[] = {
 
 const GLfloat scoreVertexData[] = {
 //	   X       Y       Z        R     G     B      A
-	-0.05f, -0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 4
-	-0.05f,  0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
-	 0.05f, -0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
-	-0.05f,  0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
-	 0.05f, -0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
-	 0.05f,  0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 2
+	-0.03f, -0.03f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 4
+	-0.03f,  0.03f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
+	 0.03f, -0.03f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
+	-0.03f,  0.03f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
+	 0.03f, -0.03f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
+	 0.03f,  0.03f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 2
 };
 
 // end::vertexData[]
@@ -539,7 +539,7 @@ void initializeVertexArrayObject()
 
 	glBindVertexArray(scoreVertexArrayObject); //make the just created vertexArrayObject the active one
 
-		glBindBuffer(GL_ARRAY_BUFFER, ballVertexDataBufferObject); //bind vertexDataBufferObject
+		glBindBuffer(GL_ARRAY_BUFFER, scoreVertexDataBufferObject); //bind vertexDataBufferObject
 
 		glEnableVertexAttribArray(positionLocation); //enable attribute at index positionLocation
 		glEnableVertexAttribArray(vertexColorLocation); //enable attribute at index vertexColorLocation
@@ -798,6 +798,16 @@ void preRender()
 }
 // end::preRender[]
 
+void renderScore()
+{
+	// set the position of the element on the screen where -1.0 < x,y < 1.0
+	glm::mat4 modelMatrix = glm::mat4(1.0);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.95, 0.95, 0));
+	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
 // tag::render[]
 void render()
 {
@@ -895,12 +905,7 @@ void render()
 	viewMatrix = glm::mat4(1.0);
 	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
 
-	// set the position of the element on the screen where -1.0 < x,y < 1.0
-	modelMatrix = glm::mat4(1.0);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.9,0.9,0));
-	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
-
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	renderScore();
 
 	// re-enable the depth testing for next iteration
 	glEnable(GL_DEPTH_TEST);
