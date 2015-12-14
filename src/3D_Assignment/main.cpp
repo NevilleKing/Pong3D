@@ -882,14 +882,28 @@ void render()
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	// 2D HUD -------------------------------------------------------------------------------------
+
+	// disable depth testing
+	glDisable(GL_DEPTH_TEST);
+
 	glBindVertexArray(scoreVertexArrayObject);
 
+	// Reset all the matrices to identity matrix
+	projectionMatrix = glm::mat4(1.0);
+	glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
+
+	viewMatrix = glm::mat4(1.0);
+	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
+
+	// set the position of the element on the screen where -1.0 < x,y < 1.0
 	modelMatrix = glm::mat4(1.0);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.9,0.9,0));
-
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
+	// re-enable the depth testing for next iteration
+	glEnable(GL_DEPTH_TEST);
 
 	glBindVertexArray(0);
 
