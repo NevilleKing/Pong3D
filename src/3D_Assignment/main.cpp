@@ -241,6 +241,10 @@ GLfloat paddle2Direction = 0.0;
 glm::vec3 ballPosition = glm::vec3(0, 0, 0);
 glm::vec3 ballDirection = glm::vec3(1, 0, 1);
 
+// Scores
+int player1Score = 0;
+int player2Score = 0;
+
 // end::gameState[]
 
 // tag::GLVariables[]
@@ -737,6 +741,10 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 	// check if a player has missed
 	if ((AREA_DEPTH/2 - WORLD_BOUNDS_WIDTH / 2 < ballPosition.z + BALL_WIDTH / 2) || (-AREA_DEPTH/2 + WORLD_BOUNDS_WIDTH / 2 > ballPosition.z - BALL_WIDTH / 2))
 	{
+		if (ballPosition.z < 0)
+			player1Score++;
+		else
+			player2Score++;
 		ballDirection = -ballDirection;
 		ballPosition = glm::vec3(0, 0, 0);
 	}
@@ -757,6 +765,8 @@ void preRender()
 // tag::render[]
 void render()
 {
+	frameLine += "Player 1: " + std::to_string(player1Score) + " Player 2: " + std::to_string(player2Score);
+
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
 
 	glBindVertexArray(paddleVertexArrayObject);
@@ -834,6 +844,8 @@ void render()
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	// 2D HUD -------------------------------------------------------------------------------------
 
 	glBindVertexArray(0);
 
