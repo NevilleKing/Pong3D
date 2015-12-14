@@ -232,13 +232,13 @@ glm::vec3 paddle1Position = { 0.0f, 0.0f, 2.0f };
 glm::vec3 paddle2Position = { 0.0f, 0.0f, -2.0f };
 
 GLfloat paddleVelocity = 1.2;
-GLfloat ballVelocity = 1.0;
+GLfloat ballVelocity = 1.5;
 
 GLfloat paddle1Direction = 0.0;
 GLfloat paddle2Direction = 0.0;
 
 glm::vec3 ballPosition = glm::vec3(0, 0, 0);
-glm::vec3 ballDirection = glm::vec3(0, 0, 1);
+glm::vec3 ballDirection = glm::vec3(1, 0, 1);
 
 // end::gameState[]
 
@@ -723,6 +723,13 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 	// check for paddle collisions
 	if (checkBallPaddleCollision(paddle1Position) || checkBallPaddleCollision(paddle2Position))
 		ballDirection.z = -ballDirection.z;
+
+	// check if a player has missed
+	if ((AREA_DEPTH/2 - WORLD_BOUNDS_WIDTH / 2 < ballPosition.z + BALL_WIDTH / 2) || (-AREA_DEPTH/2 + WORLD_BOUNDS_WIDTH / 2 > ballPosition.z - BALL_WIDTH / 2))
+	{
+		ballDirection = -ballDirection;
+		ballPosition = glm::vec3(0, 0, 0);
+	}
 }
 // end::updateSimulation[]
 
