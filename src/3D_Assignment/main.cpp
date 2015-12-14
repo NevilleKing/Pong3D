@@ -225,6 +225,17 @@ const GLfloat ballVertexData[] = {
 	 0.05f,  0.05f,  0.05f,    0.5f, 0.5f, 0.0f,  1.0f, // 6
 	-0.05f,  0.05f,  0.05f,    0.5f, 0.5f, 0.0f,  1.0f, // 5
 };
+
+const GLfloat scoreVertexData[] = {
+//	   X       Y       Z        R     G     B      A
+	-0.05f, -0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 4
+	-0.05f,  0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
+	 0.05f, -0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
+	-0.05f,  0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 1
+	 0.05f, -0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 3
+	 0.05f,  0.05f, 0.00f,    1.0f, 0.0f, 0.0f,  1.0f, // 2
+};
+
 // end::vertexData[]
 
 // tag::gameState[]
@@ -269,6 +280,9 @@ GLuint worldBoundsVertexArrayObject;
 
 GLuint ballVertexDataBufferObject;
 GLuint ballVertexArrayObject;
+
+GLuint scoreVertexDataBufferObject;
+GLuint scoreVertexArrayObject;
 // end::GLVariables[]
 
 // Constant variables - Only used for collision detection
@@ -484,6 +498,9 @@ void initializeVertexArrayObject()
 	glGenVertexArrays(1, &ballVertexArrayObject); //create a Vertex Array Object
 	cout << "Ball Vertex Array Object created OK! GLUint is: " << ballVertexArrayObject << std::endl;
 
+	glGenVertexArrays(1, &scoreVertexArrayObject); //create a Vertex Array Object
+	cout << "Score Vertex Array Object created OK! GLUint is: " << scoreVertexArrayObject << std::endl;
+
 	glBindVertexArray(paddleVertexArrayObject); //make the just created vertexArrayObject the active one
 
 		glBindBuffer(GL_ARRAY_BUFFER, paddleVertexDataBufferObject); //bind vertexDataBufferObject
@@ -520,6 +537,18 @@ void initializeVertexArrayObject()
 		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *)(3 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index vertexColorLocation
 		// end::glVertexAttribPointer[]
 
+	glBindVertexArray(scoreVertexArrayObject); //make the just created vertexArrayObject the active one
+
+		glBindBuffer(GL_ARRAY_BUFFER, ballVertexDataBufferObject); //bind vertexDataBufferObject
+
+		glEnableVertexAttribArray(positionLocation); //enable attribute at index positionLocation
+		glEnableVertexAttribArray(vertexColorLocation); //enable attribute at index vertexColorLocation
+
+														// tag::glVertexAttribPointer[]
+		glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *)(0 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index positionLocation
+		glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, (7 * sizeof(GL_FLOAT)), (GLvoid *)(3 * sizeof(GLfloat))); //specify that position data contains four floats per vertex, and goes into attribute index vertexColorLocation
+																																	// end::glVertexAttribPointer[]
+
 	glBindVertexArray(0); //unbind the vertexArrayObject so we can't change it
 
 	//cleanup
@@ -544,14 +573,21 @@ void initializeVertexBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, worldBoundsVertexDataBufferObject);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(worldBoundsVertexData), worldBoundsVertexData, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	cout << "World Bounds vertexDataBufferObject created OK! GLUint is: " << paddleVertexDataBufferObject << std::endl;
+	cout << "World Bounds vertexDataBufferObject created OK! GLUint is: " << worldBoundsVertexDataBufferObject << std::endl;
 
 	glGenBuffers(1, &ballVertexDataBufferObject);
 
 	glBindBuffer(GL_ARRAY_BUFFER, ballVertexDataBufferObject);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(ballVertexData), ballVertexData, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	cout << "Ball vertexDataBufferObject created OK! GLUint is: " << paddleVertexDataBufferObject << std::endl;
+	cout << "Ball vertexDataBufferObject created OK! GLUint is: " << ballVertexDataBufferObject << std::endl;
+
+	glGenBuffers(1, &scoreVertexDataBufferObject);
+
+	glBindBuffer(GL_ARRAY_BUFFER, scoreVertexDataBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(scoreVertexData), scoreVertexData, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	cout << "Score vertexDataBufferObject created OK! GLUint is: " << scoreVertexDataBufferObject << std::endl;
 
 	initializeVertexArrayObject();
 }
@@ -846,6 +882,14 @@ void render()
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	// 2D HUD -------------------------------------------------------------------------------------
+	glBindVertexArray(scoreVertexArrayObject);
+
+	modelMatrix = glm::mat4(1.0);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.9,0.9,0));
+
+	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
 
 	glBindVertexArray(0);
 
