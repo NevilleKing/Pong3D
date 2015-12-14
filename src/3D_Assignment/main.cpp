@@ -238,7 +238,7 @@ GLfloat paddle1Direction = 0.0;
 GLfloat paddle2Direction = 0.0;
 
 glm::vec3 ballPosition = glm::vec3(0, 0, 0);
-glm::vec3 ballDirection = glm::vec3(1, 0, 1);
+glm::vec3 ballDirection = glm::vec3(0, 0, 1);
 
 // end::gameState[]
 
@@ -268,6 +268,7 @@ GLuint ballVertexArrayObject;
 
 // Constant variables - Only used for collision detection
 const GLfloat PADDLE_WIDTH = 0.5;
+const GLfloat PADDLE_DEPTH = 0.25;
 const GLfloat AREA_WIDTH = 2.6; // The play area
 const GLfloat AREA_DEPTH = 6;
 const GLfloat WORLD_BOUNDS_WIDTH = 0.25;
@@ -677,6 +678,20 @@ bool checkSideBounds(GLfloat* value, bool leftSide, const GLfloat ITEM_WIDTH)
 	}
 }
 
+bool checkBallPaddleCollision(const glm::vec3 PADDLE_POSITION)
+{
+	if (PADDLE_POSITION.x - PADDLE_WIDTH / 2 < ballPosition.x + BALL_WIDTH / 2 &&
+		PADDLE_POSITION.x + PADDLE_WIDTH / 2 > ballPosition.x - BALL_WIDTH / 2 &&
+		PADDLE_POSITION.z - PADDLE_DEPTH / 2 < ballPosition.z + BALL_WIDTH / 2 &&
+		PADDLE_POSITION.z + PADDLE_DEPTH / 2 > ballPosition.z - BALL_WIDTH / 2)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 // tag::updateSimulation[]
 void updateSimulation(double simLength = 0.02) //update simulation with an amount of time to simulate for (in seconds)
 {
@@ -704,6 +719,10 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 	// reverse the direction of the ball if it hits the side wall
 	if (checkSideBounds(&ballPosition.x, false, BALL_WIDTH) || checkSideBounds(&ballPosition.x, true, BALL_WIDTH))
 		ballDirection.x = -ballDirection.x;
+
+	// check for paddle collisions
+	if (checkBallPaddleCollision(paddle1Position) || checkBallPaddleCollision(paddle2Position))
+		ballDirection.z = -ballDirection.z;
 }
 // end::updateSimulation[]
 
