@@ -69,6 +69,7 @@ std::string loadShader(const string filePath) {
 //our variables
 bool done = false;
 high_resolution_clock::time_point timePrev;
+bool isColliding = false;
 
 // tag::vertexData[]
 //the data about our geometry
@@ -722,7 +723,16 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 
 	// check for paddle collisions
 	if (checkBallPaddleCollision(paddle1Position) || checkBallPaddleCollision(paddle2Position))
-		ballDirection.z = -ballDirection.z;
+	{
+		if (!isColliding)
+		{
+			ballDirection.z = -ballDirection.z;
+			isColliding = true;
+		}
+	}
+	else {
+		isColliding = false;
+	}
 
 	// check if a player has missed
 	if ((AREA_DEPTH/2 - WORLD_BOUNDS_WIDTH / 2 < ballPosition.z + BALL_WIDTH / 2) || (-AREA_DEPTH/2 + WORLD_BOUNDS_WIDTH / 2 > ballPosition.z - BALL_WIDTH / 2))
