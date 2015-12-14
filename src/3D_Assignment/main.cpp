@@ -800,18 +800,38 @@ void preRender()
 
 void renderScore()
 {
-	// set the position of the element on the screen where -1.0 < x,y < 1.0
-	glm::mat4 modelMatrix = glm::mat4(1.0);
-	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.95, 0.95, 0));
-	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+	GLfloat xPos = -0.95;
 
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	// PLAYER 1
+	for (int i = 0; i < player1Score; i++)
+	{
+		glm::mat4 modelMatrix = glm::mat4(1.0);
+		modelMatrix = glm::translate(modelMatrix, glm::vec3(xPos, -0.95, 0));
+		glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		xPos += 0.07;
+	}
+
+	xPos = -0.95;
+	// PLAYER 2
+	// PLAYER 1
+	for (int i = 0; i < player2Score; i++)
+	{
+		glm::mat4 modelMatrix = glm::mat4(1.0);
+		modelMatrix = glm::translate(modelMatrix, glm::vec3(xPos, 0.95, 0));
+		glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		xPos += 0.07;
+	}
+
 }
 
 // tag::render[]
 void render()
 {
-	frameLine += "Player 1: " + std::to_string(player1Score) + " Player 2: " + std::to_string(player2Score);
+	frameLine += "Player 1: " + std::to_string(player1Score) + " Player 2: " + std::to_string(player2Score) + " ";
 
 	glUseProgram(theProgram); //installs the program object specified by program as part of current rendering state
 
