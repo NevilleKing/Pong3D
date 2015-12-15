@@ -70,6 +70,7 @@ std::string loadShader(const string filePath) {
 bool done = false;
 high_resolution_clock::time_point timePrev;
 bool isColliding = false;
+bool changeCamera = false;
 
 // tag::vertexData[]
 //the data about our geometry
@@ -256,6 +257,8 @@ glm::vec3 ballDirection = glm::vec3(1, 0, 1);
 int player1Score = 0;
 int player2Score = 0;
 
+int currentCamera = 1; // store the current camera index (1-MAX_CAMS)
+
 // end::gameState[]
 
 // tag::GLVariables[]
@@ -292,6 +295,8 @@ const GLfloat AREA_WIDTH = 2.6; // The play area
 const GLfloat AREA_DEPTH = 6;
 const GLfloat WORLD_BOUNDS_WIDTH = 0.25;
 const GLfloat BALL_WIDTH = 0.1;
+
+const int MAX_CAMS = 3;
 
 
 // end Global Variables
@@ -655,6 +660,9 @@ void handleInput()
 					case SDLK_RIGHT:
 						paddle1Direction += 1.0;
 						break;
+					case SDLK_c:
+						changeCamera = true;
+						break;
 				}
 			break;
 		case SDL_KEYUP:
@@ -784,6 +792,14 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 		ballDirection = -ballDirection;
 		ballPosition = glm::vec3(0, 0, 0);
 	}
+
+	if (changeCamera)
+	{
+		changeCamera = false;
+		currentCamera++;
+		if (currentCamera > MAX_CAMS)
+			currentCamera = 1;
+	}
 }
 // end::updateSimulation[]
 
@@ -842,7 +858,24 @@ void render()
 	glUniformMatrix4fv(projectionMatrixLocation, 1, false, glm::value_ptr(projectionMatrix));
 
 	//set viewMatrix - how we control the view (viewpoint, view direction, etc)
-	glm::mat4 viewMatrix = glm::lookAt(glm::vec3(paddle1Position.x, 2, 5), paddle1Position, glm::vec3(0, 1, 0)); // looks at the closest paddle
+	glm::mat4 viewMatrix;
+	switch (currentCamera)
+	{
+	case 1:
+		viewMatrix = glm::lookAt(glm::vec3(paddle1Position.x, 2, 5), paddle1Position, glm::vec3(0, 1, 0)); // looks at paddle 1
+		break;
+	case 2:
+		viewMatrix = glm::lookAt(glm::vec3(paddle2Position.x, -2, -5), paddle2Position, glm::vec3(0, -1, 0)); // looks at paddle 2
+		break;
+	case 3:
+		viewMatrix = glm::lookAt(glm::vec3(7, 3, 4), glm::vec3(0,0,0.5), glm::vec3(0, 1, 0)); // top down view
+		break;
+	default:
+		viewMatrix = glm::mat4(1.0);
+		break;
+	}
+
+
 	glUniformMatrix4fv(viewMatrixLocation, 1, false, glm::value_ptr(viewMatrix));
 
 	// PADDLES ------------------------------------------------------------------------------------
