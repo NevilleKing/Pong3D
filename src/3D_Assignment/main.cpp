@@ -259,6 +259,8 @@ int player2Score = 0;
 
 int currentCamera = 1; // store the current camera index (1-MAX_CAMS)
 
+GLfloat angle = 0;
+
 // end::gameState[]
 
 // tag::GLVariables[]
@@ -800,6 +802,11 @@ void updateSimulation(double simLength = 0.02) //update simulation with an amoun
 		if (currentCamera > MAX_CAMS)
 			currentCamera = 1;
 	}
+
+	// rotate the ball
+	angle += delta * 2;
+	if (angle > 360)
+		angle = 0;
 }
 // end::updateSimulation[]
 
@@ -944,6 +951,7 @@ void render()
 
 	modelMatrix = glm::mat4(1.0);
 	modelMatrix = glm::translate(modelMatrix, ballPosition);
+	modelMatrix = glm::rotate(modelMatrix, angle, glm::vec3(1, 1, 1));
 
 	glUniformMatrix4fv(modelMatrixLocation, 1, false, glm::value_ptr(modelMatrix));
 	glDrawArrays(GL_TRIANGLES, 0, 36);
