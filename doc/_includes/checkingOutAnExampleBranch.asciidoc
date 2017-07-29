@@ -1,3 +1,0 @@
-=== checkingOutAnExampleBranch
-
-NOTE: pending
