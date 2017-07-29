@@ -216,3 +216,5 @@ FakesAssemblies/
 
 #exe
 *.exe
+
+!graphics_dependencies/**/*.exe
